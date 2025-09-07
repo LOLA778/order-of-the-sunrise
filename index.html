@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Орден Восхода</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-smoothing: grayscale;
+        background-color: #1A0A0A;
+        font-family: 'Inter', sans-serif;
+        color: #F8F0E3; /* Warm White */
+        overflow: hidden; /* Prevent scrollbars from static background */
+      }
+      #background-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background: radial-gradient(ellipse at bottom, #8B2525 0%, #1A0A0A 60%);
+        animation: sunrise 60s infinite alternate ease-in-out;
+      }
+      @keyframes sunrise {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 1; }
+      }
+      #embers {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+      }
+      @keyframes pulse-fire {
+        0%, 100% {
+          transform: scale(1);
+          box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+        50% {
+          transform: scale(1.03);
+          box-shadow: 0 0 25px rgba(255, 107, 53, 0.8);
+        }
+      }
+      .animate-pulse-fire {
+        animation: pulse-fire 2.5s infinite;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "pdfjs-dist": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="background-gradient"></div>
+    <div id="embers"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+     <script>
+      // Ember effect script
+      const embersContainer = document.getElementById('embers');
+      const emberCount = 30;
+      let keyframes = '';
+
+      for (let i = 0; i < emberCount; i++) {
+        const ember = document.createElement('div');
+        const size = Math.random() * 3 + 1;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        const xStart = Math.random() * 100;
+        const xEnd = xStart + (Math.random() * 60 - 30);
+        const scaleEnd = Math.random() * 0.5;
+        const animationName = `drift-${i}`;
+
+        ember.style.position = 'absolute';
+        ember.style.width = `${size}px`;
+        ember.style.height = `${size}px`;
+        ember.style.backgroundColor = 'rgba(255, 107, 53, 0.7)'; // #FF6B35
+        ember.style.borderRadius = '50%';
+        ember.style.boxShadow = '0 0 5px rgba(255, 107, 53, 0.8)';
+        ember.style.left = `${xStart}%`;
+        ember.style.bottom = '-10px';
+        ember.style.animation = `${animationName} ${duration}s linear infinite`;
+        ember.style.animationDelay = `${delay}s`;
+
+        keyframes += `
+          @keyframes ${animationName} {
+            0% {
+              transform: translateY(0) translateX(0) scale(1);
+              opacity: 0.7;
+            }
+            100% {
+              transform: translateY(-100vh) translateX(${xEnd - xStart}px) scale(${scaleEnd});
+              opacity: 0;
+            }
+          }
+        `;
+        embersContainer.appendChild(ember);
+      }
+
+      const styleSheet = document.createElement("style");
+      styleSheet.innerText = keyframes;
+      document.head.appendChild(styleSheet);
+    </script>
+  </body>
+</html>
